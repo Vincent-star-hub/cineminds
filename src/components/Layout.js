@@ -44,6 +44,14 @@ const Layout = () => {
     };
   }, [lastScrollY]);
 
+  useEffect(() => {
+    if (isSignUpOpen || isSignInOpen) {
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    } else {
+      document.body.style.overflow = ""; // Enable scrolling
+    }
+  }, [isSignUpOpen, isSignInOpen]);
+
   const navItems = [
     { path: "/", label: "Home" },
     { path: "/movies", label: "Movies" },
@@ -58,11 +66,19 @@ const Layout = () => {
 
   const SignUpModal = () => (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
-        isSignUpOpen ? "" : "hidden"
+      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ${
+        isSignUpOpen ? "z-50" : "hidden"
       }`}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          setIsSignUpOpen(false);
+        }
+      }}
     >
-      <div className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative">
+      <div
+        className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           onClick={() => setIsSignUpOpen(false)}
           className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -80,7 +96,7 @@ const Layout = () => {
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
           <div className="relative">
             <User
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
               size={18}
             />
             <input
@@ -91,7 +107,7 @@ const Layout = () => {
           </div>
           <div className="relative">
             <Mail
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
               size={18}
             />
             <input
@@ -102,7 +118,7 @@ const Layout = () => {
           </div>
           <div className="relative">
             <Lock
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
               size={18}
             />
             <input
@@ -136,11 +152,19 @@ const Layout = () => {
 
   const SignInModal = () => (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
-        isSignInOpen ? "" : "hidden"
+      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ${
+        isSignInOpen ? "z-50" : "hidden"
       }`}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          setIsSignInOpen(false);
+        }
+      }}
     >
-      <div className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative">
+      <div
+        className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           onClick={() => setIsSignInOpen(false)}
           className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -156,7 +180,7 @@ const Layout = () => {
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
           <div className="relative">
             <Mail
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
               size={18}
             />
             <input
@@ -167,7 +191,7 @@ const Layout = () => {
           </div>
           <div className="relative">
             <Lock
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
               size={18}
             />
             <input
@@ -184,7 +208,7 @@ const Layout = () => {
           </button>
         </form>
         <p className="text-center text-sm text-gray-400 mt-4">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <button
             className="text-red-600 hover:text-red-500"
             onClick={() => {
