@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/cineminds/static/css/main.28003436.css",
-    "main.js": "/cineminds/static/js/main.545ac15d.js",
+    "main.js": "/cineminds/static/js/main.e16f6d57.js",
     "static/js/373.16a45648.chunk.js": "/cineminds/static/js/373.16a45648.chunk.js",
     "static/media/house.jpg": "/cineminds/static/media/house.74f1aa092c19f1039ef8.jpg",
     "static/media/shogun.jpg": "/cineminds/static/media/shogun.a333b1ec102223d264ce.jpg",
@@ -46,11 +46,11 @@
     "static/media/rewind.jpg": "/cineminds/static/media/rewind.b71c806a77ec9bb512e4.jpg",
     "index.html": "/cineminds/index.html",
     "main.28003436.css.map": "/cineminds/static/css/main.28003436.css.map",
-    "main.545ac15d.js.map": "/cineminds/static/js/main.545ac15d.js.map",
+    "main.e16f6d57.js.map": "/cineminds/static/js/main.e16f6d57.js.map",
     "373.16a45648.chunk.js.map": "/cineminds/static/js/373.16a45648.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.28003436.css",
-    "static/js/main.545ac15d.js"
+    "static/js/main.e16f6d57.js"
   ]
 }
