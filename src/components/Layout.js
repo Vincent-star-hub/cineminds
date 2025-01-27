@@ -34,15 +34,19 @@ const Layout = () => {
   };
 
   useEffect(() => {
-    const debouncedHandleScroll = () => {
-      requestAnimationFrame(handleScroll);
-    };
-
-    window.addEventListener("scroll", debouncedHandleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener("scroll", debouncedHandleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollY]);
+
+  useEffect(() => {
+    if (isSignUpOpen || isSignInOpen) {
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    } else {
+      document.body.style.overflow = ""; // Enable scrolling
+    }
+  }, [isSignUpOpen, isSignInOpen]);
 
   const navItems = [
     { path: "/", label: "Home" },
@@ -55,19 +59,6 @@ const Layout = () => {
   const isActive = (path) => {
     return location.pathname === path;
   };
-
-  const toggleBodyScroll = (shouldLock) => {
-    if (shouldLock) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-  };
-
-  useEffect(() => {
-    toggleBodyScroll(isSignUpOpen || isSignInOpen);
-    return () => toggleBodyScroll(false); // Clean up on unmount
-  }, [isSignUpOpen, isSignInOpen]);
 
   const SignUpModal = () => (
     <div
@@ -150,8 +141,8 @@ const Layout = () => {
   const SignInModal = () => (
     <div
       className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
-        isSignUpOpen ? "" : "hidden"
-      } overflow-auto`}
+        isSignInOpen ? "" : "hidden"
+      }`}
     >
       <div className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative">
         <button
