@@ -64,91 +64,83 @@ const Layout = () => {
     return location.pathname === path;
   };
 
-  const SignUpModal = () => (
-    <div
-      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ${
-        isSignUpOpen ? "z-50" : "hidden"
-      }`}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          setIsSignUpOpen(false);
-        }
-      }}
-    >
+  const SignUpModal = () =>
+    isSignUpOpen && (
       <div
-        className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative"
-        onClick={(e) => e.stopPropagation()}
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        style={{ zIndex: 1000 }}
       >
-        <button
-          onClick={() => setIsSignUpOpen(false)}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white"
-        >
-          <X size={20} />
-        </button>
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-white mb-2">
-            Create an account
-          </h2>
-          <p className="text-gray-400">
-            Join CineMinds to track your favorite movies and TV shows.
+        <div className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative">
+          <button
+            onClick={() => setIsSignUpOpen(false)}
+            className="absolute top-4 right-4 text-gray-400 hover:text-white"
+          >
+            <X size={20} />
+          </button>
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-white mb-2">
+              Create an account
+            </h2>
+            <p className="text-gray-400">
+              Join CineMinds to track your favorite movies and TV shows.
+            </p>
+          </div>
+          <form className="space-y-4">
+            <div className="relative">
+              <User
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={18}
+              />
+              <input
+                type="text"
+                placeholder="Enter your name"
+                className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
+              />
+            </div>
+            <div className="relative">
+              <Mail
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={18}
+              />
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
+              />
+            </div>
+            <div className="relative">
+              <Lock
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={18}
+              />
+              <input
+                type="password"
+                placeholder="Create a password"
+                className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors"
+            >
+              Sign Up
+            </button>
+          </form>
+          <p className="text-center text-sm text-gray-400 mt-4">
+            Already have an account?{" "}
+            <button
+              className="text-red-600 hover:text-red-500"
+              onClick={() => {
+                setIsSignUpOpen(false);
+                setIsSignInOpen(true);
+              }}
+            >
+              Sign in
+            </button>
           </p>
         </div>
-        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-          <div className="relative">
-            <User
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-              size={18}
-            />
-            <input
-              type="text"
-              placeholder="Enter your name"
-              className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
-            />
-          </div>
-          <div className="relative">
-            <Mail
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-              size={18}
-            />
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
-            />
-          </div>
-          <div className="relative">
-            <Lock
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-              size={18}
-            />
-            <input
-              type="password"
-              placeholder="Create a password"
-              className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors"
-          >
-            Sign Up
-          </button>
-        </form>
-        <p className="text-center text-sm text-gray-400 mt-4">
-          Already have an account?{" "}
-          <button
-            className="text-red-600 hover:text-red-500"
-            onClick={() => {
-              setIsSignUpOpen(false);
-              setIsSignInOpen(true);
-            }}
-          >
-            Sign in
-          </button>
-        </p>
       </div>
-    </div>
-  );
+    );
 
   const SignInModal = () => (
     <div
