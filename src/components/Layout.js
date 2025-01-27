@@ -23,18 +23,24 @@ const Layout = () => {
   const location = useLocation();
 
   const handleScroll = () => {
-    if (window.scrollY > lastScrollY) {
-      setIsNavbarVisible(false);
+    if (window.scrollY === 0) {
+      setIsNavbarVisible(true); // Always show navbar at the top
+    } else if (window.scrollY > lastScrollY) {
+      setIsNavbarVisible(false); // Hide navbar when scrolling down
     } else {
-      setIsNavbarVisible(true);
+      setIsNavbarVisible(true); // Show navbar when scrolling up
     }
     setLastScrollY(window.scrollY);
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    const debouncedHandleScroll = () => {
+      requestAnimationFrame(handleScroll);
+    };
+
+    window.addEventListener("scroll", debouncedHandleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", debouncedHandleScroll);
     };
   }, [lastScrollY]);
 
@@ -49,6 +55,19 @@ const Layout = () => {
   const isActive = (path) => {
     return location.pathname === path;
   };
+
+  const toggleBodyScroll = (shouldLock) => {
+    if (shouldLock) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  };
+
+  useEffect(() => {
+    toggleBodyScroll(isSignUpOpen || isSignInOpen);
+    return () => toggleBodyScroll(false); // Clean up on unmount
+  }, [isSignUpOpen, isSignInOpen]);
 
   const SignUpModal = () => (
     <div
@@ -131,8 +150,8 @@ const Layout = () => {
   const SignInModal = () => (
     <div
       className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
-        isSignInOpen ? "" : "hidden"
-      }`}
+        isSignUpOpen ? "" : "hidden"
+      } overflow-auto`}
     >
       <div className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative">
         <button
@@ -292,7 +311,7 @@ const Layout = () => {
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
                 <Play className="text-red-600" />
-                <span className="text-2xl font-bold">MovieHub</span>
+                <span className="text-2xl font-bold">Cineminds</span>
               </div>
               <p className="text-gray-400">
                 Your ultimate destination for movies and TV shows.
