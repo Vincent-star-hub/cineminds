@@ -23,28 +23,26 @@ const Layout = () => {
   const location = useLocation();
 
   const handleScroll = () => {
-    if (window.scrollY > lastScrollY) {
-      setIsNavbarVisible(false);
+    if (window.scrollY === 0) {
+      setIsNavbarVisible(true); // Always show navbar at the top
+    } else if (window.scrollY > lastScrollY) {
+      setIsNavbarVisible(false); // Hide navbar when scrolling down
     } else {
-      setIsNavbarVisible(true);
+      setIsNavbarVisible(true); // Show navbar when scrolling up
     }
     setLastScrollY(window.scrollY);
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    const debouncedHandleScroll = () => {
+      requestAnimationFrame(handleScroll);
+    };
+
+    window.addEventListener("scroll", debouncedHandleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", debouncedHandleScroll);
     };
   }, [lastScrollY]);
-
-  useEffect(() => {
-    if (isSignUpOpen || isSignInOpen) {
-      document.body.style.overflow = "hidden"; // Prevent scrolling
-    } else {
-      document.body.style.overflow = ""; // Enable scrolling
-    }
-  }, [isSignUpOpen, isSignInOpen]);
 
   const navItems = [
     { path: "/", label: "Home" },
@@ -63,7 +61,6 @@ const Layout = () => {
       className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
         isSignUpOpen ? "" : "hidden"
       }`}
-      style={{ zIndex: 9999 }}
     >
       <div className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative">
         <button
@@ -83,7 +80,7 @@ const Layout = () => {
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
           <div className="relative">
             <User
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={18}
             />
             <input
@@ -94,7 +91,7 @@ const Layout = () => {
           </div>
           <div className="relative">
             <Mail
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={18}
             />
             <input
@@ -105,7 +102,7 @@ const Layout = () => {
           </div>
           <div className="relative">
             <Lock
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={18}
             />
             <input
@@ -142,7 +139,6 @@ const Layout = () => {
       className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
         isSignInOpen ? "" : "hidden"
       }`}
-      style={{ zIndex: 9999 }}
     >
       <div className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative">
         <button
@@ -160,7 +156,7 @@ const Layout = () => {
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
           <div className="relative">
             <Mail
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={18}
             />
             <input
@@ -171,7 +167,7 @@ const Layout = () => {
           </div>
           <div className="relative">
             <Lock
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={18}
             />
             <input
@@ -188,7 +184,7 @@ const Layout = () => {
           </button>
         </form>
         <p className="text-center text-sm text-gray-400 mt-4">
-          Don't have an account?{" "}
+          Don’t have an account?{" "}
           <button
             className="text-red-600 hover:text-red-500"
             onClick={() => {
@@ -203,22 +199,23 @@ const Layout = () => {
     </div>
   );
 
-  // Rest of the component remains the same
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
+      {/* Navigation */}
       <nav
-        className={`fixed w-full z-40 bg-gray-900 transition-transform duration-300 ${
+        className={`fixed w-full z-40 transition-transform duration-300 ${
           isNavbarVisible ? "transform translate-y-0" : "-translate-y-16"
         }`}
       >
-        {/* Navigation content remains the same */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
+            {/* Left Logo Section */}
             <Link to="/" className="flex items-center space-x-2">
               <Play className="text-red-600" />
               <span className="text-2xl font-bold text-white">CineMinds</span>
             </Link>
 
+            {/* Centered Navigation Items */}
             <div className="hidden md:flex items-center justify-center space-x-8 flex-grow">
               {navItems.map((item) => (
                 <Link
@@ -239,6 +236,7 @@ const Layout = () => {
               ))}
             </div>
 
+            {/* Right Sign-Up Section */}
             <div className="hidden md:flex">
               <button
                 onClick={() => setIsSignUpOpen(true)}
@@ -257,7 +255,7 @@ const Layout = () => {
           </div>
 
           {isMenuOpen && (
-            <div className="md:hidden border-t border-gray-700">
+            <div className="md:hidden border-t border-gray-700 backdrop-blur bg-gray-900/50">
               <div className="px-2 pt-2 pb-3 space-y-1">
                 {navItems.map((item) => (
                   <Link
@@ -290,11 +288,10 @@ const Layout = () => {
       <SignUpModal />
       <SignInModal />
 
-      <main className="flex-grow pt-16">
+      <main className="flex-grow">
         <Outlet />
       </main>
 
-      {/* Footer content remains the same */}
       <footer className="bg-gray-900 text-white border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
