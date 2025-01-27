@@ -22,35 +22,52 @@ const Layout = () => {
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const location = useLocation();
 
+  // Add form state for sign up
+  const [signUpForm, setSignUpForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  // Add form state for sign in
+  const [signInForm, setSignInForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  // Handle sign up form changes
+  const handleSignUpChange = (e) => {
+    const { name, value } = e.target;
+    setSignUpForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle sign in form changes
+  const handleSignInChange = (e) => {
+    const { name, value } = e.target;
+    setSignInForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleScroll = () => {
-    if (window.scrollY === 0) {
-      setIsNavbarVisible(true); // Always show navbar at the top
-    } else if (window.scrollY > lastScrollY) {
-      setIsNavbarVisible(false); // Hide navbar when scrolling down
+    if (window.scrollY > lastScrollY) {
+      setIsNavbarVisible(false);
     } else {
-      setIsNavbarVisible(true); // Show navbar when scrolling up
+      setIsNavbarVisible(true);
     }
     setLastScrollY(window.scrollY);
   };
 
   useEffect(() => {
-    const debouncedHandleScroll = () => {
-      requestAnimationFrame(handleScroll);
-    };
-
-    window.addEventListener("scroll", debouncedHandleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener("scroll", debouncedHandleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollY]);
-
-  useEffect(() => {
-    if (isSignUpOpen || isSignInOpen) {
-      document.body.style.overflow = "hidden"; // Prevent scrolling
-    } else {
-      document.body.style.overflow = ""; // Enable scrolling
-    }
-  }, [isSignUpOpen, isSignInOpen]);
 
   const navItems = [
     { path: "/", label: "Home" },
@@ -66,19 +83,11 @@ const Layout = () => {
 
   const SignUpModal = () => (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ${
-        isSignUpOpen ? "z-50" : "hidden"
+      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
+        isSignUpOpen ? "" : "hidden"
       }`}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          setIsSignUpOpen(false);
-        }
-      }}
     >
-      <div
-        className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative">
         <button
           onClick={() => setIsSignUpOpen(false)}
           className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -96,33 +105,42 @@ const Layout = () => {
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
           <div className="relative">
             <User
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={18}
             />
             <input
               type="text"
+              name="name"
+              value={signUpForm.name}
+              onChange={handleSignUpChange}
               placeholder="Enter your name"
               className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
             />
           </div>
           <div className="relative">
             <Mail
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={18}
             />
             <input
               type="email"
+              name="email"
+              value={signUpForm.email}
+              onChange={handleSignUpChange}
               placeholder="Enter your email"
               className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
             />
           </div>
           <div className="relative">
             <Lock
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={18}
             />
             <input
               type="password"
+              name="password"
+              value={signUpForm.password}
+              onChange={handleSignUpChange}
               placeholder="Create a password"
               className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
             />
@@ -152,19 +170,11 @@ const Layout = () => {
 
   const SignInModal = () => (
     <div
-      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ${
-        isSignInOpen ? "z-50" : "hidden"
+      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
+        isSignInOpen ? "" : "hidden"
       }`}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          setIsSignInOpen(false);
-        }
-      }}
     >
-      <div
-        className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative">
         <button
           onClick={() => setIsSignInOpen(false)}
           className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -180,22 +190,28 @@ const Layout = () => {
         <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
           <div className="relative">
             <Mail
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={18}
             />
             <input
               type="email"
+              name="email"
+              value={signInForm.email}
+              onChange={handleSignInChange}
               placeholder="Enter your email"
               className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
             />
           </div>
           <div className="relative">
             <Lock
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={18}
             />
             <input
               type="password"
+              name="password"
+              value={signInForm.password}
+              onChange={handleSignInChange}
               placeholder="Enter your password"
               className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
             />
@@ -223,6 +239,7 @@ const Layout = () => {
     </div>
   );
 
+  // Rest of the component remains the same...
   return (
     <div className="min-h-screen flex flex-col bg-gray-900">
       {/* Navigation */}
