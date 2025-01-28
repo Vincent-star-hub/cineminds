@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Filter, Star, Play, X, Clock, Calendar, Heart } from "lucide-react";
 import civilwar from "../images/civilwar.jpg";
 import badboys from "../images/badboys.jpg";
@@ -375,6 +375,18 @@ const Movies = () => {
         : [...prev, movie]
     );
   };
+
+  useEffect(() => {
+    if (selectedMovie) {
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    } else {
+      document.body.style.overflow = ""; // Enable scrolling
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedMovie]);
 
   return (
     <div className=" bg-gray-950/90">

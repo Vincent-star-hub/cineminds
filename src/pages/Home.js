@@ -7,6 +7,8 @@ import {
   Heart,
   Clock,
   Calendar,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import dune from "../images/dune.jpg";
 import backinaction from "../images/backinaction.jpg";
@@ -29,6 +31,8 @@ import rurouni from "../images/rurouni.jpg";
 import upstream from "../images/upstream.jpg";
 
 const Home = () => {
+  const [isMuted, setIsMuted] = useState(true);
+
   const featuredMovies = [
     {
       id: 1,
@@ -37,6 +41,7 @@ const Home = () => {
       description:
         "Paul Atreides unites with Chani and the Fremen while seeking revenge against those who destroyed his family. As he faces a choice between the love of his life and the fate of the universe, he must prevent a terrible future only he can foresee.",
       background: dune,
+      youtubeId: "Way9Dexny3w",
       genre: "Adventure, Sci-Fi",
       duration: "2h 45m",
       releaseDate: "November 3, 2023",
@@ -48,6 +53,7 @@ const Home = () => {
       description:
         "The incredible tale of Bella Baxter, a young woman brought back to life by an unorthodox scientist, navigating a world of wonder, love, and discovery.",
       background: poorThings,
+      youtubeId: "RlbR5N6veqw",
       genre: "Drama, Sci-Fi, Fantasy",
       duration: "2h 21m",
       releaseDate: "September 8, 2023",
@@ -59,6 +65,7 @@ const Home = () => {
       description:
         "Venom and Eddie Brock face their most dangerous challenge yet, as they take on a new villain in a world full of chaos and destruction. The symbiote duo must confront their past and decide their future.",
       background: venom,
+      youtubeId: "__2bjWbetsA",
       genre: "Action, Adventure, Sci-Fi",
       duration: "2h 10m",
       releaseDate: "October 23, 2024",
@@ -70,6 +77,7 @@ const Home = () => {
       description:
         "A historical drama that follows the life of J. Robert Oppenheimer, the physicist who played a key role in the creation of the atomic bomb during World War II. The film delves into his moral dilemmas and the impact of his invention on the world.",
       background: oppenheimer,
+      youtubeId: "uYPbbksJxIg",
       genre: "Biography, Drama, History",
       duration: "2h 39m",
       releaseDate: "July 21, 2023",
@@ -81,6 +89,7 @@ const Home = () => {
       description:
         "The final chapter in the epic journey of Kenshin Himura, as he battles to protect those he loves while confronting his past. A fight for redemption and the survival of his ideals.",
       background: rurouni,
+      youtubeId: "eAA1ZDSCWjI",
       genre: "Action, Drama",
       duration: "2h 20m",
       releaseDate: "April 23, 2021",
@@ -92,6 +101,7 @@ const Home = () => {
       description:
         "A high-stakes crime thriller with an explosive mix of action and drama, as a man fights to survive while being hunted down by a criminal organization.",
       background: rebel,
+      youtubeId: "gF3gZicntIw",
       genre: "Thriller, Crime, Action",
       duration: "1h 50m",
       releaseDate: "2022",
@@ -103,6 +113,7 @@ const Home = () => {
       description:
         "Gao Zhilei's impulsive decision to become a stay-at-home husband leads to unforeseen challenges. As life takes a reverse turn, he's forced to face responsibilities as the family's breadwinner, ultimately finding himself and starting anew.",
       background: upstream,
+      youtubeId: "iUwInrl9Vn8",
       genre: "Drama",
       duration: "2h 1m",
       releaseDate: "August 3, 2024",
@@ -271,17 +282,18 @@ const Home = () => {
   const [currentFeatureIndex, setCurrentFeatureIndex] = useState(0);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
+  const [key, setKey] = useState(0);
 
   const featuredMovie = featuredMovies[currentFeatureIndex];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentFeatureIndex(
-        (prevIndex) => (prevIndex + 1) % featuredMovies.length
-      );
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+    // Force iframe refresh when changing videos
+    setKey((prev) => prev + 1);
+  }, [currentFeatureIndex]);
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+  };
 
   const openMovieModal = (movie) => {
     setSelectedMovie(movie);
@@ -304,13 +316,30 @@ const Home = () => {
       {/* Hero Section */}
       <div className="relative min-h-[500px] md:h-screen overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img
-            src={featuredMovie.background}
-            alt={featuredMovie.title}
-            className="w-full h-full object-cover opacity-50"
-          />
+          <iframe
+            src={`https://www.youtube.com/embed/${
+              featuredMovie.youtubeId
+            }?autoplay=1&controls=0&mute=${isMuted ? 1 : 0}&loop=1&playlist=${
+              featuredMovie.youtubeId
+            }&playsinline=1&rel=0&showinfo=0&modestbranding=1`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            className="w-full h-[120%] -mt-[10%] pointer-events-none"
+            frameBorder="0"
+          ></iframe>
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-gray-950/90 to-transparent z-10" />
+
+        {/* Sound Toggle Button */}
+        <button
+          onClick={toggleMute}
+          className="absolute top-20 right-4 z-30 bg-gray-900/50 p-2 rounded-full hover:bg-gray-900/75 transition-colors"
+        >
+          {isMuted ? (
+            <VolumeX className="w-6 h-6" />
+          ) : (
+            <Volume2 className="w-6 h-6" />
+          )}
+        </button>
 
         <div className="relative z-20 container mx-auto px-4 pt-16 md:pt-24 flex items-center h-full">
           <div className="max-w-2xl space-y-4 md:space-y-6">
@@ -355,7 +384,7 @@ const Home = () => {
               >
                 <Heart
                   className={`w-5 h-5 md:w-6 md:h-6 ${
-                    watchlist.some((m) => m.title === featuredMovie.title)
+                    watchlist.some((m) => m.id === featuredMovie.id)
                       ? "text-red-500 fill-current"
                       : ""
                   }`}
@@ -371,7 +400,10 @@ const Home = () => {
           {featuredMovies.map((movie, index) => (
             <div
               key={movie.id}
-              onClick={() => setCurrentFeatureIndex(index)}
+              onClick={() => {
+                setCurrentFeatureIndex(index);
+                setIsMuted(false); // Reset to muted when changing videos
+              }}
               className={`w-24 md:w-60 h-16 md:h-36 rounded-lg overflow-hidden cursor-pointer transition-transform transform ${
                 currentFeatureIndex === index
                   ? "scale-105 md:scale-110 border-2 md:border-4 border-red-600 shadow-xl"
@@ -379,7 +411,7 @@ const Home = () => {
               }`}
             >
               <img
-                src={movie.background}
+                src={`https://img.youtube.com/vi/${movie.youtubeId}/hqdefault.jpg`}
                 alt={movie.title}
                 className="w-full h-full object-cover"
               />

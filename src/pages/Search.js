@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Search as SearchIcon,
   Play,
@@ -704,6 +704,19 @@ const Search = () => {
         : [...prev, movie]
     );
   };
+
+  useEffect(() => {
+    if (selectedMovie) {
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    } else {
+      document.body.style.overflow = ""; // Enable scrolling
+    }
+
+    return () => {
+      // Cleanup to ensure scrolling is re-enabled if the component unmounts
+      document.body.style.overflow = "";
+    };
+  }, [selectedMovie]);
 
   return (
     <div className="min-h-screen bg-gray-950/90">

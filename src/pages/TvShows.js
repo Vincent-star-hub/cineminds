@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Star, Film, Play, Clock, Calendar, X, Heart } from "lucide-react";
 import house from "../images/house.jpg";
 import truedetective from "../images/truedetective.jpg";
@@ -186,6 +186,19 @@ const TvShows = () => {
         : [...prev, movie]
     );
   };
+
+  useEffect(() => {
+    if (selectedShow) {
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    } else {
+      document.body.style.overflow = ""; // Enable scrolling
+    }
+
+    return () => {
+      // Cleanup to ensure scrolling is re-enabled if the component unmounts
+      document.body.style.overflow = "";
+    };
+  }, [selectedShow]);
 
   const genres = [...new Set(shows.flatMap((show) => show.genre.split(", ")))];
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Heart, Trash2, Clock, Play, X, Calendar, Star } from "lucide-react";
 import dune from "../images/dune.jpg";
 import poorthings from "../images/poorthings.jpg";
@@ -171,6 +171,19 @@ const Watchlist = () => {
     // Add your remove logic here
     console.log(`Removing item with id: ${id}`);
   };
+
+  useEffect(() => {
+    if (selectedItem) {
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    } else {
+      document.body.style.overflow = ""; // Enable scrolling
+    }
+
+    return () => {
+      // Cleanup to ensure scrolling is re-enabled if the component unmounts
+      document.body.style.overflow = "";
+    };
+  }, [selectedItem]);
 
   return (
     <div className="min-h-screen bg-gray-950/90">
