@@ -45,18 +45,11 @@ const Layout = () => {
   }, [lastScrollY]);
 
   useEffect(() => {
-    const bodyStyle = document.body.style;
     if (isSignUpOpen || isSignInOpen) {
-      bodyStyle.position = "fixed";
-      bodyStyle.width = "100%";
+      document.body.style.overflow = "hidden"; // Prevent scrolling
     } else {
-      bodyStyle.position = "";
-      bodyStyle.width = "";
+      document.body.style.overflow = ""; // Enable scrolling
     }
-    return () => {
-      bodyStyle.position = "";
-      bodyStyle.width = "";
-    };
   }, [isSignUpOpen, isSignInOpen]);
 
   const navItems = [
@@ -71,160 +64,163 @@ const Layout = () => {
     return location.pathname === path;
   };
 
-  const ModalWrapper = ({ children, isOpen, onClose }) => (
+  const SignUpModal = () => (
     <div
       className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ${
-        isOpen ? "z-50" : "hidden"
+        isSignUpOpen ? "z-50" : "hidden"
       }`}
       onClick={(e) => {
         if (e.target === e.currentTarget) {
-          onClose();
+          setIsSignUpOpen(false);
         }
       }}
-      style={{ WebkitOverflowScrolling: "touch" }} // For iOS smooth scrolling
     >
       <div
         className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative"
         onClick={(e) => e.stopPropagation()}
       >
-        {children}
+        <button
+          onClick={() => setIsSignUpOpen(false)}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white"
+        >
+          <X size={20} />
+        </button>
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-white mb-2">
+            Create an account
+          </h2>
+          <p className="text-gray-400">
+            Join CineMinds to track your favorite movies and TV shows.
+          </p>
+        </div>
+        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <div className="relative">
+            <User
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              size={18}
+            />
+            <input
+              type="text"
+              placeholder="Enter your name"
+              className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
+            />
+          </div>
+          <div className="relative">
+            <Mail
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              size={18}
+            />
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
+            />
+          </div>
+          <div className="relative">
+            <Lock
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              size={18}
+            />
+            <input
+              type="password"
+              placeholder="Create a password"
+              className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors"
+          >
+            Sign Up
+          </button>
+        </form>
+        <p className="text-center text-sm text-gray-400 mt-4">
+          Already have an account?{" "}
+          <button
+            className="text-red-600 hover:text-red-500"
+            onClick={() => {
+              setIsSignUpOpen(false);
+              setIsSignInOpen(true);
+            }}
+          >
+            Sign in
+          </button>
+        </p>
       </div>
     </div>
   );
 
-  const SignUpModal = () => (
-    <ModalWrapper isOpen={isSignUpOpen} onClose={() => setIsSignUpOpen(false)}>
-      <button
-        onClick={() => setIsSignUpOpen(false)}
-        className="absolute top-4 right-4 text-gray-400 hover:text-white"
-      >
-        <X size={20} />
-      </button>
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-white mb-2">
-          Create an account
-        </h2>
-        <p className="text-gray-400">
-          Join CineMinds to track your favorite movies and TV shows.
-        </p>
-      </div>
-      <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-        <div className="relative">
-          <User
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-            size={18}
-          />
-          <input
-            type="text"
-            placeholder="Enter your name"
-            className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
-          />
-        </div>
-        <div className="relative">
-          <Mail
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-            size={18}
-          />
-          <input
-            type="email"
-            placeholder="Enter your email"
-            inputMode="email"
-            autoCorrect="off"
-            className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
-          />
-        </div>
-        <div className="relative">
-          <Lock
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-            size={18}
-          />
-          <input
-            type="password"
-            placeholder="Create a password"
-            className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors"
-        >
-          Sign Up
-        </button>
-      </form>
-      <p className="text-center text-sm text-gray-400 mt-4">
-        Already have an account?{" "}
-        <button
-          className="text-red-600 hover:text-red-500"
-          onClick={() => {
-            setIsSignUpOpen(false);
-            setIsSignInOpen(true);
-          }}
-        >
-          Sign in
-        </button>
-      </p>
-    </ModalWrapper>
-  );
-
   const SignInModal = () => (
-    <ModalWrapper isOpen={isSignInOpen} onClose={() => setIsSignInOpen(false)}>
-      <button
-        onClick={() => setIsSignInOpen(false)}
-        className="absolute top-4 right-4 text-gray-400 hover:text-white"
+    <div
+      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ${
+        isSignInOpen ? "z-50" : "hidden"
+      }`}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          setIsSignInOpen(false);
+        }
+      }}
+    >
+      <div
+        className="bg-gray-900 p-6 rounded-lg w-full max-w-md mx-4 relative"
+        onClick={(e) => e.stopPropagation()}
       >
-        <X size={20} />
-      </button>
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-white mb-2">Sign In</h2>
-        <p className="text-gray-400">
-          Log in to access your personalized movie list.
+        <button
+          onClick={() => setIsSignInOpen(false)}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white"
+        >
+          <X size={20} />
+        </button>
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-white mb-2">Sign In</h2>
+          <p className="text-gray-400">
+            Log in to access your personalized movie list.
+          </p>
+        </div>
+        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <div className="relative">
+            <Mail
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              size={18}
+            />
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
+            />
+          </div>
+          <div className="relative">
+            <Lock
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              size={18}
+            />
+            <input
+              type="password"
+              placeholder="Enter your password"
+              className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors"
+          >
+            Sign In
+          </button>
+        </form>
+        <p className="text-center text-sm text-gray-400 mt-4">
+          Don't have an account?{" "}
+          <button
+            className="text-red-600 hover:text-red-500"
+            onClick={() => {
+              setIsSignInOpen(false);
+              setIsSignUpOpen(true);
+            }}
+          >
+            Sign up
+          </button>
         </p>
       </div>
-      <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-        <div className="relative">
-          <Mail
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-            size={18}
-          />
-          <input
-            type="email"
-            placeholder="Enter your email"
-            inputMode="email"
-            autoCorrect="off"
-            className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
-          />
-        </div>
-        <div className="relative">
-          <Lock
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
-            size={18}
-          />
-          <input
-            type="password"
-            placeholder="Enter your password"
-            className="w-full bg-gray-800 text-white rounded-lg py-2 pl-10 pr-4 border border-gray-700 focus:border-red-600 focus:outline-none"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors"
-        >
-          Sign In
-        </button>
-      </form>
-      <p className="text-center text-sm text-gray-400 mt-4">
-        Don't have an account?{" "}
-        <button
-          className="text-red-600 hover:text-red-500"
-          onClick={() => {
-            setIsSignInOpen(false);
-            setIsSignUpOpen(true);
-          }}
-        >
-          Sign up
-        </button>
-      </p>
-    </ModalWrapper>
+    </div>
   );
 
   return (
