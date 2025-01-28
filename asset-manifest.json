@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/cineminds/static/css/main.44cc1633.css",
-    "main.js": "/cineminds/static/js/main.d0276f65.js",
+    "main.css": "/cineminds/static/css/main.2abc2716.css",
+    "main.js": "/cineminds/static/js/main.b32caf82.js",
     "static/js/373.16a45648.chunk.js": "/cineminds/static/js/373.16a45648.chunk.js",
     "static/media/house.jpg": "/cineminds/static/media/house.74f1aa092c19f1039ef8.jpg",
     "static/media/shogun.jpg": "/cineminds/static/media/shogun.a333b1ec102223d264ce.jpg",
@@ -45,12 +45,12 @@
     "static/media/thezone.jpg": "/cineminds/static/media/thezone.ce46c7efc0df350862fa.jpg",
     "static/media/rewind.jpg": "/cineminds/static/media/rewind.b71c806a77ec9bb512e4.jpg",
     "index.html": "/cineminds/index.html",
-    "main.44cc1633.css.map": "/cineminds/static/css/main.44cc1633.css.map",
-    "main.d0276f65.js.map": "/cineminds/static/js/main.d0276f65.js.map",
+    "main.2abc2716.css.map": "/cineminds/static/css/main.2abc2716.css.map",
+    "main.b32caf82.js.map": "/cineminds/static/js/main.b32caf82.js.map",
     "373.16a45648.chunk.js.map": "/cineminds/static/js/373.16a45648.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.44cc1633.css",
-    "static/js/main.d0276f65.js"
+    "static/css/main.2abc2716.css",
+    "static/js/main.b32caf82.js"
   ]
 }
