@@ -33,14 +33,14 @@ const SignUpModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-50">
       <div className="flex min-h-screen items-center justify-center p-4">
         <div
           className="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
           onClick={onClose}
         />
 
-        <div className="relative w-full max-w-md rounded-lg bg-gray-900 p-8 shadow-xl">
+        <div className="relative w-full max-w-md rounded-lg bg-gray-900 p-8 shadow-xl max-h-[90vh] overflow-y-auto">
           <button
             onClick={onClose}
             className="absolute right-4 top-4 text-gray-400 hover:text-white"
@@ -175,14 +175,14 @@ const SignInModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-50">
       <div className="flex min-h-screen items-center justify-center p-4">
         <div
           className="fixed inset-0 bg-black bg-opacity-75 transition-opacity"
           onClick={onClose}
         />
 
-        <div className="relative w-full max-w-md rounded-lg bg-gray-900 p-8 shadow-xl">
+        <div className="relative w-full max-w-md rounded-lg bg-gray-900 p-8 shadow-xl max-h-[90vh] overflow-y-auto">
           <button
             onClick={onClose}
             className="absolute right-4 top-4 text-gray-400 hover:text-white"
